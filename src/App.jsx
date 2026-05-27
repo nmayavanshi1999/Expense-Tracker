@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { toast } from "react-toastify";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -28,7 +29,7 @@ function App() {
     e.preventDefault();
 
     if (!title || !amount || !date) {
-      alert("Please fill all fields");
+      toast.warn("Please fill all fields");
       return;
     }
 
