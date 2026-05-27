@@ -1,6 +1,15 @@
 import { useState } from "react";
 import "./App.css";
 import { toast } from "react-toastify";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -24,6 +33,32 @@ function App() {
       date: "2026-05-27",
     },
   ]);
+  const chartData = [
+    {
+      category: "Food",
+      amount: expenses
+        .filter((item) => item.category === "Food")
+        .reduce((total, item) => total + item.amount, 0),
+    },
+    {
+      category: "Travel",
+      amount: expenses
+        .filter((item) => item.category === "Travel")
+        .reduce((total, item) => total + item.amount, 0),
+    },
+    {
+      category: "Shopping",
+      amount: expenses
+        .filter((item) => item.category === "Shopping")
+        .reduce((total, item) => total + item.amount, 0),
+    },
+    {
+      category: "Bills",
+      amount: expenses
+        .filter((item) => item.category === "Bills")
+        .reduce((total, item) => total + item.amount, 0),
+    },
+  ];
 
   const addExpense = (e) => {
     e.preventDefault();
@@ -107,6 +142,20 @@ function App() {
         <div className="summary-box">
           <h2>Total Expense: ₹{totalExpense}</h2>
           <p>{expenses.length} Transactions</p>
+        </div>
+
+        <div className="chart-box">
+          <h2>Expense Analytics</h2>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="amount" fill="#7c3aed" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
         <div className="expense-list">

@@ -13,6 +13,14 @@ body {
   min-height: 100vh;
 }
 
+
+.chart-box {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
