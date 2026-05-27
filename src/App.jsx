@@ -58,6 +58,19 @@ function App() {
         .filter((item) => item.category === "Bills")
         .reduce((total, item) => total + item.amount, 0),
     },
+
+    {
+      category: "Entertainment",
+      amount: expenses
+        .filter((item) => item.category === "Entertainment")
+        .reduce((total, item) => total + item.amount, 0),
+    },
+    {
+      category: "Others",
+      amount: expenses
+        .filter((item) => item.category === "Others")
+        .reduce((total, item) => total + item.amount, 0),
+    },
   ];
 
   const addExpense = (e) => {
