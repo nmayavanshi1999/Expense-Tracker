@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 import { toast } from "react-toastify";
 import {
@@ -26,14 +26,12 @@ function App() {
     }
   });
 
-  useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-  }, [expenses]);
-
   const addExpense = (e) => {
     e.preventDefault();
 
-    if (!title || !amount || !date) {
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle || !amount || !date) {
       toast.warn("Please fill all fields");
       return;
     }
@@ -45,13 +43,15 @@ function App() {
 
     const newExpense = {
       id: Date.now(),
-      title: title.trim(),
+      title: trimmedTitle,
       amount: Number(amount),
       category,
       date,
     };
 
-    setExpenses((prevExpenses) => [...prevExpenses, newExpense]);
+    const updatedExpenses = [...expenses, newExpense];
+    setExpenses(updatedExpenses);
+    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
 
     toast.success("Expense added successfully");
 
@@ -64,6 +64,7 @@ function App() {
   const deleteExpense = (id) => {
     const updatedExpenses = expenses.filter((item) => item.id !== id);
     setExpenses(updatedExpenses);
+    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
     toast.error("Expense deleted");
   };
 
