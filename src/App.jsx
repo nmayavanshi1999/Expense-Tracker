@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { toast } from "react-toastify";
 import {
@@ -17,66 +17,18 @@ function App() {
   const [category, setCategory] = useState("Food");
   const [date, setDate] = useState("");
 
-  const [expenses, setExpenses] = useState(()=>{
-    const savedExpenses = localStorage.getItem("expenses");
-    return savedExpenses
-      ? JSON.parse(savedExpenses):
-  [
-    {
-      id: 1,
-      title: "Petrol",
-      amount: 150,
-      category: "Travel",
-      date: "2026-05-27",
-    },
-    {
-      id: 2,
-      title: "Burger",
-      amount: 120,
-      category: "Food",
-      date: "2026-05-27",
-    },
-  ]
-});
-  const chartData = [
-    {
-      category: "Food",
-      amount: expenses
-        .filter((item) => item.category === "Food")
-        .reduce((total, item) => total + item.amount, 0),
-    },
-    {
-      category: "Travel",
-      amount: expenses
-        .filter((item) => item.category === "Travel")
-        .reduce((total, item) => total + item.amount, 0),
-    },
-    {
-      category: "Shopping",
-      amount: expenses
-        .filter((item) => item.category === "Shopping")
-        .reduce((total, item) => total + item.amount, 0),
-    },
-    {
-      category: "Bills",
-      amount: expenses
-        .filter((item) => item.category === "Bills")
-        .reduce((total, item) => total + item.amount, 0),
-    },
+  const [expenses, setExpenses] = useState(() => {
+    try {
+      const savedExpenses = localStorage.getItem("expenses");
+      return savedExpenses ? JSON.parse(savedExpenses) : [];
+    } catch (error) {
+      return [];
+    }
+  });
 
-    {
-      category: "Entertainment",
-      amount: expenses
-        .filter((item) => item.category === "Entertainment")
-        .reduce((total, item) => total + item.amount, 0),
-    },
-    {
-      category: "Others",
-      amount: expenses
-        .filter((item) => item.category === "Others")
-        .reduce((total, item) => total + item.amount, 0),
-    },
-  ];
+  useEffect(() => {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses]);
 
   const addExpense = (e) => {
     e.preventDefault();
@@ -86,15 +38,22 @@ function App() {
       return;
     }
 
+    if (Number(amount) <= 0) {
+      toast.warn("Amount must be greater than 0");
+      return;
+    }
+
     const newExpense = {
       id: Date.now(),
-      title: title,
+      title: title.trim(),
       amount: Number(amount),
-      category: category,
-      date: date,
+      category,
+      date,
     };
 
-    setExpenses([...expenses, newExpense]);
+    setExpenses((prevExpenses) => [...prevExpenses, newExpense]);
+
+    toast.success("Expense added successfully");
 
     setTitle("");
     setAmount("");
@@ -105,9 +64,26 @@ function App() {
   const deleteExpense = (id) => {
     const updatedExpenses = expenses.filter((item) => item.id !== id);
     setExpenses(updatedExpenses);
+    toast.error("Expense deleted");
   };
 
   const totalExpense = expenses.reduce((total, item) => total + item.amount, 0);
+
+  const categories = [
+    "Food",
+    "Travel",
+    "Shopping",
+    "Bills",
+    "Entertainment",
+    "Others",
+  ];
+
+  const chartData = categories.map((cat) => ({
+    category: cat,
+    amount: expenses
+      .filter((item) => item.category === cat)
+      .reduce((total, item) => total + item.amount, 0),
+  }));
 
   return (
     <div className="app">
@@ -177,29 +153,33 @@ function App() {
         </div>
 
         <div className="expense-list">
-          {expenses.map((item) => (
-            <div className="expense-item" key={item.id}>
-              <div>
-                <h3>{item.title}</h3>
-                <p className="category">{item.category}</p>
-                <p className="date">{item.date}</p>
-              </div>
+          {expenses.length === 0 ? (
+            <p className="empty-message">No expenses added yet</p>
+          ) : (
+            expenses.map((item) => (
+              <div className="expense-item" key={item.id}>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p className="category">{item.category}</p>
+                  <p className="date">{item.date}</p>
+                </div>
 
-              <div className="right-box">
-                <h3 className="amount">₹{item.amount}</h3>
-                <button
-                  className="delete-btn"
-                  onClick={() => deleteExpense(item.id)}
-                >
-                  Delete
-                </button>
+                <div className="right-box">
+                  <h3 className="amount">₹{item.amount}</h3>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteExpense(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default App; 
+export default App;
