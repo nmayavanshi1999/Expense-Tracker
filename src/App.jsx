@@ -17,7 +17,11 @@ function App() {
   const [category, setCategory] = useState("Food");
   const [date, setDate] = useState("");
 
-  const [expenses, setExpenses] = useState([
+  const [expenses, setExpenses] = useState(()=>{
+    const savedExpenses = localStorage.getItem("expenses");
+    return savedExpenses
+      ? JSON.parse(savedExpenses):
+  [
     {
       id: 1,
       title: "Petrol",
@@ -32,7 +36,8 @@ function App() {
       category: "Food",
       date: "2026-05-27",
     },
-  ]);
+  ]
+});
   const chartData = [
     {
       category: "Food",
