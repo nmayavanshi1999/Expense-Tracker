@@ -241,7 +241,7 @@ body {
 }
 
 /* Tablet */
-@@media (max-width: 640px) {
+@media (max-width: 640px) {
   .chart-box {
     margin-top: 18px;
     padding: 14px 10px 28px;
