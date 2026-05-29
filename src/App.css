@@ -1,3 +1,133 @@
+/* ===== WELCOME SCREEN ===== */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: overlayFade 0.6s ease 2.8s forwards;
+}
+
+@keyframes overlayFade {
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.welcome-name {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 700;
+  color: white;
+  letter-spacing: 6px;
+  animation: nameBlink 2s ease-in-out;
+}
+
+@keyframes nameBlink {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(30px);
+  }
+
+  25% {
+    opacity: 1;
+    transform: scale(1.2) translateY(0);
+  }
+
+  45% {
+    opacity: 0.2;
+    transform: scale(0.95);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  80% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.welcome-sub {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  margin-top: 14px;
+  animation: fadeUp 0.7s ease 0.9s both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-dots {
+  display: flex;
+  gap: 12px;
+  margin-top: 40px;
+  animation: fadeUp 0.5s ease 1.3s both;
+}
+
+.welcome-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  display: block;
+  animation: dotPulse 0.8s ease infinite alternate;
+}
+
+.welcome-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.welcome-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  to {
+    background: white;
+    transform: scale(1.4);
+  }
+}
+
+/* App slowly appears after welcome screen */
+.app {
+  animation: appReveal 0.8s ease 3.2s both;
+}
+
+@keyframes appReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== END WELCOME SCREEN ===== */
+
 * {
   margin: 0;
   padding: 0;
